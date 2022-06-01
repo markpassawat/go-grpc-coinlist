@@ -2,10 +2,9 @@ package server
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 
-	"github.com/markpassawat/go-gprc-coinlist/gateway/config"
+	"github.com/markpassawat/go-grpc-coinlist/gateway/config"
 	// "github.com/markpassawat/gateway/pkg/middleware"
 	pb "github.com/markpassawat/go-grpc-coinlist/proto/moviesapp"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
@@ -37,11 +36,11 @@ func Handler(cfg *config.Config) *http.Server {
 		logrus.Fatalln("Failed to register gateway:", err)
 	}
 
-	// gwServer := &http.Server{
-	// 	Addr: fmt.Sprintf("%s:%d", cfg.Host, cfg.Port),
-	// 	Handler: middleware.Cors(&middleware.CorsConfig{
-	// 		AllowedOrigin: cfg.AllowedOrigin,
-	// 	})(gwmux),
-	// }
-	// return gwServer
+	gwServer := &http.Server{
+		Addr: fmt.Sprintf("%s:%d", cfg.Host, cfg.Port),
+		Handler: middleware.Cors(&middleware.CorsConfig{
+			AllowedOrigin: cfg.AllowedOrigin,
+		})(gwmux),
+	}
+	return gwServer
 }
