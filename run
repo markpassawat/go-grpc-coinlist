@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+APPNAME=$1
+source ./env $APPNAME
+go run $APPNAME/*.go
