@@ -25,33 +25,3 @@ func Handler(cfg *config.Config) (*grpc.Server, net.Listener) {
 	return s, lis
 }
 
-// func main() {
-// 	initMovies()
-// 	s := grpc.NewServer()
-
-// 	lis, err := net.Listen("tcp", port)
-// 	if err != nil {
-// 		log.Fatalln("Failed to listen:", err)
-// 	}
-
-// 	pb.RegisterMovieServer(s, &movieServer{})
-
-// 	log.Printf("gRPC server listening on %v", lis.Addr())
-// 	if err := s.Serve(lis); err != nil {
-// 		log.Fatalf("failed to serve: %v", err)
-// 	}
-// }
-
-// func initMovies() {
-// 	movie1 := &pb.MovieInfo{Id: "1", Isbn: "0593310438",
-// 		Title: "The Batman", Director: &pb.Director{
-// 			Firstname: "Matt", Lastname: "Reeves"}}
-// 	movie2 := &pb.MovieInfo{Id: "2", Isbn: "3430220302",
-// 		Title: "Doctor Strange in the Multiverse of Madness",
-// 		Director: &pb.Director{Firstname: "Sam",
-// 			Lastname: "Raimi"}}
-
-// 	movies = append(movies, movie1)
-// 	movies = append(movies, movie2)
-// }
-
