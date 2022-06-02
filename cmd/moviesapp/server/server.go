@@ -7,7 +7,7 @@ import (
 
 	"google.golang.org/grpc"
 	
-	"github.com/markpassawat/go-grpc-coinlist/moviesapp/config"
+	"github.com/markpassawat/go-grpc-coinlist/cmd/moviesapp/config"
 	pb "github.com/markpassawat/go-grpc-coinlist/proto/moviesapp"
 )
 
@@ -24,22 +24,6 @@ func Handler(cfg *config.Config) (*grpc.Server, net.Listener) {
 	pb.RegisterMovieServer(s, &movieServer{})
 	return s, lis
 }
-// import (
-// 	"log"
-// 	"net"
-	
-
-// 	"google.golang.org/grpc"
-
-// 	pb "github.com/markpassawat/go-grpc-coinlist/proto/moviesapp"
-// )
-
-// const (
-// 	port = ":50051"
-// )
-
-
-
 
 // func main() {
 // 	initMovies()

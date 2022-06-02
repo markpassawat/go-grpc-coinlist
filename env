@@ -18,4 +18,4 @@ while read i; do
     echo "$i"
     export "$i"
   fi
-done < $CMDNAME/.env
+done < cmd/$CMDNAME/.env

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/markpassawat/go-grpc-coinlist/moviesapp/config"
-	"github.com/markpassawat/go-grpc-coinlist/moviesapp/server"
+	"github.com/markpassawat/go-grpc-coinlist/cmd/moviesapp/config"
+	"github.com/markpassawat/go-grpc-coinlist/cmd/moviesapp/server"
 	
 	"github.com/kelseyhightower/envconfig"
 	"github.com/sirupsen/logrus"

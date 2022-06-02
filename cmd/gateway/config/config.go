@@ -9,5 +9,5 @@ type Config struct {
 
 	AllowedOrigin string `split_words:"true" default:"*"`
 
-	Helloworld string `split_words:"true" default:"localhost:8081"`
+	Moviesapp string `split_words:"true" default:"localhost:8081"`
 }

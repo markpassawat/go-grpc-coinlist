@@ -22,8 +22,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MovieClient interface {
-	GetMovies(ctx context.Context, in *Empty, opts ...grpc.CallOption) (Movie_GetMoviesClient, error)
 	GetMovie(ctx context.Context, in *Id, opts ...grpc.CallOption) (*MovieInfo, error)
+	GetMovies(ctx context.Context, in *Empty, opts ...grpc.CallOption) (Movie_GetMoviesClient, error)
 	CreateMovie(ctx context.Context, in *MovieInfo, opts ...grpc.CallOption) (*Id, error)
 	UpdateMovie(ctx context.Context, in *MovieInfo, opts ...grpc.CallOption) (*Status, error)
 	DeleteMovie(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Status, error)
@@ -35,6 +35,15 @@ type movieClient struct {
 
 func NewMovieClient(cc grpc.ClientConnInterface) MovieClient {
 	return &movieClient{cc}
+}
+
+func (c *movieClient) GetMovie(ctx context.Context, in *Id, opts ...grpc.CallOption) (*MovieInfo, error) {
+	out := new(MovieInfo)
+	err := c.cc.Invoke(ctx, "/moviesapp.Movie/GetMovie", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *movieClient) GetMovies(ctx context.Context, in *Empty, opts ...grpc.CallOption) (Movie_GetMoviesClient, error) {
@@ -69,15 +78,6 @@ func (x *movieGetMoviesClient) Recv() (*MovieInfo, error) {
 	return m, nil
 }
 
-func (c *movieClient) GetMovie(ctx context.Context, in *Id, opts ...grpc.CallOption) (*MovieInfo, error) {
-	out := new(MovieInfo)
-	err := c.cc.Invoke(ctx, "/moviesapp.Movie/GetMovie", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *movieClient) CreateMovie(ctx context.Context, in *MovieInfo, opts ...grpc.CallOption) (*Id, error) {
 	out := new(Id)
 	err := c.cc.Invoke(ctx, "/moviesapp.Movie/CreateMovie", in, out, opts...)
@@ -109,8 +109,8 @@ func (c *movieClient) DeleteMovie(ctx context.Context, in *Id, opts ...grpc.Call
 // All implementations should embed UnimplementedMovieServer
 // for forward compatibility
 type MovieServer interface {
-	GetMovies(*Empty, Movie_GetMoviesServer) error
 	GetMovie(context.Context, *Id) (*MovieInfo, error)
+	GetMovies(*Empty, Movie_GetMoviesServer) error
 	CreateMovie(context.Context, *MovieInfo) (*Id, error)
 	UpdateMovie(context.Context, *MovieInfo) (*Status, error)
 	DeleteMovie(context.Context, *Id) (*Status, error)
@@ -120,11 +120,11 @@ type MovieServer interface {
 type UnimplementedMovieServer struct {
 }
 
-func (UnimplementedMovieServer) GetMovies(*Empty, Movie_GetMoviesServer) error {
-	return status.Errorf(codes.Unimplemented, "method GetMovies not implemented")
-}
 func (UnimplementedMovieServer) GetMovie(context.Context, *Id) (*MovieInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetMovie not implemented")
+}
+func (UnimplementedMovieServer) GetMovies(*Empty, Movie_GetMoviesServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetMovies not implemented")
 }
 func (UnimplementedMovieServer) CreateMovie(context.Context, *MovieInfo) (*Id, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateMovie not implemented")
@@ -147,6 +147,24 @@ func RegisterMovieServer(s grpc.ServiceRegistrar, srv MovieServer) {
 	s.RegisterService(&Movie_ServiceDesc, srv)
 }
 
+func _Movie_GetMovie_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Id)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MovieServer).GetMovie(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/moviesapp.Movie/GetMovie",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MovieServer).GetMovie(ctx, req.(*Id))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Movie_GetMovies_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(Empty)
 	if err := stream.RecvMsg(m); err != nil {
@@ -166,24 +184,6 @@ type movieGetMoviesServer struct {
 
 func (x *movieGetMoviesServer) Send(m *MovieInfo) error {
 	return x.ServerStream.SendMsg(m)
-}
-
-func _Movie_GetMovie_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Id)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MovieServer).GetMovie(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/moviesapp.Movie/GetMovie",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MovieServer).GetMovie(ctx, req.(*Id))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _Movie_CreateMovie_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {

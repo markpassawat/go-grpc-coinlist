@@ -10,16 +10,16 @@ option go_package = "github.com/markpassawat/go-grpc-coinlist";
 
 
 service Movie {
+	rpc GetMovie (Id) returns (MovieInfo){	
+		option (google.api.http) = {
+		get: "/v1/example/movies/{value}"
+	  };
+	}
 	rpc GetMovies (Empty) returns (stream MovieInfo){
 		option (google.api.http) = {
 		  get: "/v1/example/movies"
 		};
 	  }
-	rpc GetMovie (Id) returns (MovieInfo){	
-		option (google.api.http) = {
-		get: "/v1/example/movies/id"
-	  };
-	}
 	rpc CreateMovie (MovieInfo) returns (Id){	
 		option (google.api.http) = {
 		post: "/v1/example/movies"
@@ -34,12 +34,14 @@ service Movie {
 	}
 	rpc DeleteMovie (Id) returns (Status){	
 		option (google.api.http) = {
-		delete: "/v1/example/movies"
+		delete: "/v1/example/movies/{value}"
 	  };
 	}
 }
 
-message Empty {}
+message Empty {
+	
+}
 
 message MovieInfo {
 	string id = 1;

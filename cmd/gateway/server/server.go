@@ -2,15 +2,17 @@ package server
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
-	"github.com/markpassawat/go-grpc-coinlist/gateway/config"
-	// "github.com/markpassawat/gateway/pkg/middleware"
-	pb "github.com/markpassawat/go-grpc-coinlist/proto/moviesapp"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+
+	"github.com/markpassawat/go-grpc-coinlist/cmd/gateway/config"
+	"github.com/markpassawat/go-grpc-coinlist/pkg/middleware"
+	pb "github.com/markpassawat/go-grpc-coinlist/proto/moviesapp"
 )
 
 func Handler(cfg *config.Config) *http.Server {
@@ -22,7 +24,7 @@ func Handler(cfg *config.Config) *http.Server {
 	// This is where the gRPC-Gateway proxies the requests
 	conn, err := grpc.DialContext(
 		context.Background(),
-		cfg.Helloworld,
+		cfg.Moviesapp,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 	if err != nil {
