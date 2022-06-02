@@ -15,10 +15,6 @@ type movieServer struct {
 
 var movies []*pb.MovieInfo
 
-// func NewServer() *movieServer {
-// 	return &movieServer{}
-// }
-
 func (s *movieServer) GetMovies(in  *pb.Empty, stream pb.Movie_GetMoviesServer) error {
 	for _, movie := range movies {
 		if err := stream.Send(movie); err != nil {
