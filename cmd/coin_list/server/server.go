@@ -7,8 +7,8 @@ import (
 
 	"google.golang.org/grpc"
 	
-	"github.com/markpassawat/go-grpc-coinlist/cmd/moviesapp/config"
-	pb "github.com/markpassawat/go-grpc-coinlist/proto/moviesapp"
+	"github.com/markpassawat/go-grpc-coinlist/cmd/coin_list/config"
+	pb "github.com/markpassawat/go-grpc-coinlist/proto/coinlist"
 )
 
 func Handler(cfg *config.Config) (*grpc.Server, net.Listener) {
@@ -21,7 +21,7 @@ func Handler(cfg *config.Config) (*grpc.Server, net.Listener) {
 	// Create a gRPC server object
 	s := grpc.NewServer()
 	// Attach the Greeter service to the server
-	pb.RegisterMovieServer(s, &movieServer{})
+	pb.RegisterCoinListServer(s, &coinServer{})
 	return s, lis
 }
 
