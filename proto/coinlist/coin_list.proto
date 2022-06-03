@@ -45,7 +45,7 @@ message CoinInfo {
 	string Name = 3;
 	string Image = 4;
 	uint64 Current_price = 5;
-	uint64 Mclarket_cap_rank = 6;
+	uint64 Market_cap_rank = 6;
 	google.protobuf.Timestamp Create_at = 7;
 	google.protobuf.Timestamp Update_at = 8;
 }
