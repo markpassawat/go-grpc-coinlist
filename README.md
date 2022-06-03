@@ -7,7 +7,7 @@ Clone this repository with,
 ```
 ## Usage
 Run both command
-For run server:
+for run server:
 ```bash
   source run gateway
 ```
