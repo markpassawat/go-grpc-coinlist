@@ -27,7 +27,6 @@ func (s *coinServer) GetCoins(in *pb.Empty, stream pb.CoinList_GetCoinsServer) e
 
 func (s *coinServer) GetCoin(ctx context.Context,
 	in *pb.Id) (*pb.CoinInfo, error) {
-		log.Printf("Received: %v", in)
 	
 		res := &pb.CoinInfo{}
 
