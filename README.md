@@ -1,17 +1,24 @@
 # go-grpc-coinlist
 
-
-To run the service, run this command to open API server:
+## Installation 
+Clone this repository with,
 ```bash
-  $ source run gateway
+  git clone https://github.com/markpassawat/go-grpc-coinlist.git
 ```
-run this command to open API service:
+---
+## Usage
+Run both command
+For run server:
 ```bash
-  $ source run coin_list
+  source run gateway
 ```
-
-
+For run service:
+```bash
+  source run coin_list
+```
+---
+## FAQ
 If there are any problem, try run this command and do it again.
 ```bash
-  $ export PATH="$PATH:$(go env GOPATH)/bin"
+  export PATH="$PATH:$(go env GOPATH)/bin"
 ```
