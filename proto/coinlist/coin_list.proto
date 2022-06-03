@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package coinlist;
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/markpassawat/go-grpc-coinlist";
+
+service CoinList {
+	rpc GetCoins (Empty) returns (stream CoinInfo){	
+		option (google.api.http) = {
+		get: "/coins"
+	  };
+	}
+	rpc GetCoin (Id) returns (CoinInfo){	
+		option (google.api.http) = {
+		get: "/coins/{symbol}"
+	  };
+	}
+	rpc CreateCoins (CoinInfo) returns (Id){	
+		option (google.api.http) = {
+		post: "/coins"
+		body: "*"
+	  };
+	}
+	rpc UpdateCoins (CoinInfo) returns (Status){	
+		option (google.api.http) = {
+		patch: "/coins"
+		body: "*"
+	  };
+	}
+	rpc DeleteCoin (Id) returns (Status){	
+		option (google.api.http) = {
+		delete: "/coins/{symbol}"
+	  };
+	}
+}
+
+message Empty{}
+
+message CoinInfo {
+    string Coin_id = 1;  
+    string Symbol = 2;
+	string Name = 3;
+	string Image = 4;
+	uint64 Current_price = 5;
+	uint64 Mclarket_cap_rank = 6;
+	google.protobuf.Timestamp Create_at = 7;
+	google.protobuf.Timestamp Update_at = 8;
+}
+
+message Id {
+	string coin_id = 1; 
+	string symbol = 2;
+	string name = 3;
+}
+
+message Status {
+	int32 status = 1; 
+}

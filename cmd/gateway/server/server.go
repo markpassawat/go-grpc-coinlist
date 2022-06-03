@@ -12,7 +12,7 @@ import (
 
 	"github.com/markpassawat/go-grpc-coinlist/cmd/gateway/config"
 	"github.com/markpassawat/go-grpc-coinlist/pkg/middleware"
-	pb "github.com/markpassawat/go-grpc-coinlist/proto/moviesapp"
+	pb "github.com/markpassawat/go-grpc-coinlist/proto/coinlist"
 )
 
 func Handler(cfg *config.Config) *http.Server {
@@ -33,7 +33,7 @@ func Handler(cfg *config.Config) *http.Server {
 
 	gwmux := runtime.NewServeMux()
 	// Register Greeter
-	err = pb.RegisterMovieHandler(context.Background(), gwmux, conn)
+	err = pb.RegisterCoinListHandler(context.Background(), gwmux, conn)
 	if err != nil {
 		logrus.Fatalln("Failed to register gateway:", err)
 	}
