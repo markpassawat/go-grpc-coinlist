@@ -17,11 +17,11 @@ For run service:
 
 Use postman to testing APIs:
 
-* [GetCoin] : `GET /coins/{symbol}`
-* [GetCoins] : `GET /coins`
-* [CreateCoins] : `POST /coins`
-* [UpdateCoins] : `PATCH /coins`
-* [DeleteCoin] : `DELETE /coins/{symbol}`
+* GetCoin : `GET /coins/:symbol`
+* GetCoins : `GET /coins`
+* CreateCoins : `POST /coins`
+* UpdateCoins : `PATCH /coins`
+* DeleteCoin : `DELETE /coins/:symbol`
 
 
 ## FAQ
