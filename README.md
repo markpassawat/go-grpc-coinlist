@@ -15,7 +15,7 @@ For run service:
   source run coin_list
 ```
 
-Use postman to testing APIs:
+Use Postman to testing APIs on `localhost:8080` :
 
 * GetCoin : `GET /coins/:symbol`
 * GetCoins : `GET /coins`
