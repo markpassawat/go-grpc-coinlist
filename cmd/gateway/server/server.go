@@ -24,7 +24,7 @@ func Handler(cfg *config.Config) *http.Server {
 	// This is where the gRPC-Gateway proxies the requests
 	conn, err := grpc.DialContext(
 		context.Background(),
-		cfg.Moviesapp,
+		cfg.Coinlist,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 	if err != nil {

@@ -9,5 +9,5 @@ type Config struct {
 
 	AllowedOrigin string `split_words:"true" default:"*"`
 
-	Moviesapp string `split_words:"true" default:"localhost:8081"`
+	Coinlist string `split_words:"true" default:"localhost:8081"`
 }
