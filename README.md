@@ -17,11 +17,11 @@ For run service:
 
 Use Postman to testing APIs on `localhost:8080` :
 
-* GetCoin : `GET /coins/:symbol`
+* GetCoin : `GET /coins/:coin_id`
 * GetCoins : `GET /coins`
-* CreateCoins : `POST /coins`
+* CreateCoins : `POST /coins/:coin_id`
 * UpdateCoins : `PATCH /coins`
-* DeleteCoin : `DELETE /coins/:symbol`
+* DeleteCoin : `DELETE /coins/:coin_id`
 
 
 ## FAQ
