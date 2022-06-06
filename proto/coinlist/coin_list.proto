@@ -15,12 +15,12 @@ service CoinList {
 	}
 	rpc GetCoin (Id) returns (CoinInfo){	
 		option (google.api.http) = {
-		get: "/coins/{symbol}"
+		get: "/coins/{coin_id}"
 	  };
 	}
-	rpc CreateCoins (CoinInfo) returns (Id){	
+	rpc CreateCoins (Id) returns (Status){	
 		option (google.api.http) = {
-		post: "/coins"
+		post: "/coins/{coin_id}"
 		body: "*"
 	  };
 	}
@@ -32,7 +32,7 @@ service CoinList {
 	}
 	rpc DeleteCoin (Id) returns (Status){	
 		option (google.api.http) = {
-		delete: "/coins/{symbol}"
+		delete: "/coins/{coin_id}"
 	  };
 	}
 }
@@ -44,8 +44,8 @@ message CoinInfo {
     string Symbol = 2;
 	string Name = 3;
 	string Image = 4;
-	uint64 Current_price = 5;
-	uint64 Market_cap_rank = 6;
+	double Current_price = 5;
+	int32 Market_cap_rank = 6;
 	google.protobuf.Timestamp Create_at = 7;
 	google.protobuf.Timestamp Update_at = 8;
 }

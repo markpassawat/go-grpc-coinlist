@@ -11,7 +11,7 @@ import (
 func main() {
 	cfg := config.Config{}
 	log := logrus.StandardLogger()
-	envconfig.MustProcess("GRPC_MOVIESAPP", &cfg)
+	envconfig.MustProcess("GRPC_COINLIST", &cfg)
 
 	log.Info("starting server...")
 	e, lis := server.Handler(&cfg)

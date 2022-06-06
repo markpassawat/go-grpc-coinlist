@@ -24,7 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 type CoinListClient interface {
 	GetCoins(ctx context.Context, in *Empty, opts ...grpc.CallOption) (CoinList_GetCoinsClient, error)
 	GetCoin(ctx context.Context, in *Id, opts ...grpc.CallOption) (*CoinInfo, error)
-	CreateCoins(ctx context.Context, in *CoinInfo, opts ...grpc.CallOption) (*Id, error)
+	CreateCoins(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Status, error)
 	UpdateCoins(ctx context.Context, in *CoinInfo, opts ...grpc.CallOption) (*Status, error)
 	DeleteCoin(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Status, error)
 }
@@ -78,8 +78,8 @@ func (c *coinListClient) GetCoin(ctx context.Context, in *Id, opts ...grpc.CallO
 	return out, nil
 }
 
-func (c *coinListClient) CreateCoins(ctx context.Context, in *CoinInfo, opts ...grpc.CallOption) (*Id, error) {
-	out := new(Id)
+func (c *coinListClient) CreateCoins(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Status, error) {
+	out := new(Status)
 	err := c.cc.Invoke(ctx, "/coinlist.CoinList/CreateCoins", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -111,7 +111,7 @@ func (c *coinListClient) DeleteCoin(ctx context.Context, in *Id, opts ...grpc.Ca
 type CoinListServer interface {
 	GetCoins(*Empty, CoinList_GetCoinsServer) error
 	GetCoin(context.Context, *Id) (*CoinInfo, error)
-	CreateCoins(context.Context, *CoinInfo) (*Id, error)
+	CreateCoins(context.Context, *Id) (*Status, error)
 	UpdateCoins(context.Context, *CoinInfo) (*Status, error)
 	DeleteCoin(context.Context, *Id) (*Status, error)
 }
@@ -126,7 +126,7 @@ func (UnimplementedCoinListServer) GetCoins(*Empty, CoinList_GetCoinsServer) err
 func (UnimplementedCoinListServer) GetCoin(context.Context, *Id) (*CoinInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCoin not implemented")
 }
-func (UnimplementedCoinListServer) CreateCoins(context.Context, *CoinInfo) (*Id, error) {
+func (UnimplementedCoinListServer) CreateCoins(context.Context, *Id) (*Status, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateCoins not implemented")
 }
 func (UnimplementedCoinListServer) UpdateCoins(context.Context, *CoinInfo) (*Status, error) {
@@ -187,7 +187,7 @@ func _CoinList_GetCoin_Handler(srv interface{}, ctx context.Context, dec func(in
 }
 
 func _CoinList_CreateCoins_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CoinInfo)
+	in := new(Id)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -199,7 +199,7 @@ func _CoinList_CreateCoins_Handler(srv interface{}, ctx context.Context, dec fun
 		FullMethod: "/coinlist.CoinList/CreateCoins",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CoinListServer).CreateCoins(ctx, req.(*CoinInfo))
+		return srv.(CoinListServer).CreateCoins(ctx, req.(*Id))
 	}
 	return interceptor(ctx, in, info, handler)
 }
