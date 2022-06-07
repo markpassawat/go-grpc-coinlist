@@ -290,6 +290,40 @@ func local_request_CoinList_DeleteCoin_0(ctx context.Context, marshaler runtime.
 
 }
 
+func request_CoinList_SearchCoins_0(ctx context.Context, marshaler runtime.Marshaler, client CoinListClient, req *http.Request, pathParams map[string]string) (CoinList_SearchCoinsClient, runtime.ServerMetadata, error) {
+	var protoReq InputText
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["input_text"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "input_text")
+	}
+
+	protoReq.InputText, err = runtime.String(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "input_text", err)
+	}
+
+	stream, err := client.SearchCoins(ctx, &protoReq)
+	if err != nil {
+		return nil, metadata, err
+	}
+	header, err := stream.Header()
+	if err != nil {
+		return nil, metadata, err
+	}
+	metadata.HeaderMD = header
+	return stream, metadata, nil
+
+}
+
 // RegisterCoinListHandlerServer registers the http handlers for service CoinList to "mux".
 // UnaryRPC     :call CoinListServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
@@ -397,6 +431,13 @@ func RegisterCoinListHandlerServer(ctx context.Context, mux *runtime.ServeMux, s
 
 		forward_CoinList_DeleteCoin_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
+	})
+
+	mux.Handle("GET", pattern_CoinList_SearchCoins_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		err := status.Error(codes.Unimplemented, "streaming calls are not yet supported in the in-process transport")
+		_, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+		return
 	})
 
 	return nil
@@ -545,6 +586,27 @@ func RegisterCoinListHandlerClient(ctx context.Context, mux *runtime.ServeMux, c
 
 	})
 
+	mux.Handle("GET", pattern_CoinList_SearchCoins_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		var err error
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/coinlist.CoinList/SearchCoins", runtime.WithHTTPPathPattern("/search/{input_text}"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_CoinList_SearchCoins_0(ctx, inboundMarshaler, client, req, pathParams)
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_CoinList_SearchCoins_0(ctx, mux, outboundMarshaler, w, req, func() (proto.Message, error) { return resp.Recv() }, mux.GetForwardResponseOptions()...)
+
+	})
+
 	return nil
 }
 
@@ -558,6 +620,8 @@ var (
 	pattern_CoinList_UpdateCoins_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"coins"}, ""))
 
 	pattern_CoinList_DeleteCoin_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1}, []string{"coins", "coin_id"}, ""))
+
+	pattern_CoinList_SearchCoins_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1}, []string{"search", "input_text"}, ""))
 )
 
 var (
@@ -570,4 +634,6 @@ var (
 	forward_CoinList_UpdateCoins_0 = runtime.ForwardResponseMessage
 
 	forward_CoinList_DeleteCoin_0 = runtime.ForwardResponseMessage
+
+	forward_CoinList_SearchCoins_0 = runtime.ForwardResponseStream
 )

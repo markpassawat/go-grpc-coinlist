@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -9,26 +10,19 @@ import (
 	"github.com/sirupsen/logrus"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
-
-	// "github.com/markpassawat/go-grpc-coinlist/pkg/common/model"
 	Model "github.com/markpassawat/go-grpc-coinlist/pkg/common/model"
 	pb "github.com/markpassawat/go-grpc-coinlist/proto/coinlist"
 	coingecko "github.com/superoo7/go-gecko/v3"
 )
 
 func InsertOne(coinId string) {
-	// db := ConnectDatabase()
 	ctx := context.TODO()
 
-	// log := logrus.StandardLogger()
-
-	// Create and Update 95 coins in database  ------------->
 	httpClient := &http.Client{
 		Timeout: time.Second * 10,
 	}
 	CG := coingecko.NewClient(httpClient)
 
-	// coinListDetails := []*Model.Coin{}
 	coin, err := CG.CoinsMarket("usd", []string{coinId}, "market_cap_desc", 1, 1, false, []string{})
 	newCoin := &Model.Coin{}
 
@@ -45,19 +39,6 @@ func InsertOne(coinId string) {
 			CreateAt:      time.Now(),
 			UpdateAt:      time.Now(),
 		}
-		// return newCoin
-		// for _, coinTemp := range *coin {
-		// 	newCoin =  Model.Coin{
-		// 		CoinId:        coinId,
-		// 		Name:          coin.Name,
-		// 		Symbol:        coin.Symbol,
-		// 		Image:         coin.Image,
-		// 		CurrentPrice:  fmt.Sprint(coin.CurrentPrice),
-		// 		MarketCapRank: coin.MarketCapRank,
-		// 		CreateAt:      time.Now(),
-		// 		UpdateAt:      time.Now(),
-		// 	}
-		// }
 	}
 
 	dbCon := ConnectDatabase()
@@ -98,7 +79,81 @@ func GetAll() []*pb.CoinInfo {
 	} else {
 		return coinList
 	}
-
 	return nil
 
+}
+
+func SearchCoins(searchText string) []*pb.CoinInfo {
+	db := ConnectDatabase()
+	ctx := context.TODO()
+
+	coinListTemp := new([]*Model.Coin)
+	coinList := []*pb.CoinInfo{}
+	searchTextTemp := fmt.Sprintf("%%%s%%", searchText)
+
+	err := db.NewSelect().Model((*Model.Coin)(nil)).Order("market_cap_rank ASC").WhereOr("coin_id LIKE ?", searchTextTemp).WhereOr("name LIKE ?", searchTextTemp).WhereOr("symbol LIKE ?", searchTextTemp).Scan(ctx, coinListTemp)
+
+	for _, coinTemp := range *coinListTemp {
+		coinList = append(coinList, &pb.CoinInfo{
+			CoinId:        coinTemp.CoinId,
+			Name:          coinTemp.CoinId,
+			Symbol:        coinTemp.Symbol,
+			Image:         coinTemp.Image,
+			CurrentPrice:  coinTemp.CurrentPrice,
+			MarketCapRank: int32(coinTemp.MarketCapRank),
+			CreateAt:      timestamppb.New(coinTemp.CreateAt),
+			UpdateAt:      timestamppb.New(coinTemp.UpdateAt),
+		})
+	}
+
+	if err != nil {
+		log.Fatal("Err: ", err)
+	} else {
+		return coinList
+	}
+	return nil
+}
+
+func DeleteFromId(id string) {
+
+}
+
+func UpdateCoinPrice() {
+	for {
+		db := ConnectDatabase()
+		ctx := context.TODO()
+
+		// Get id list from database
+		dataIdList := new([]Model.Coin)
+		idList := []string{}
+		errGetId := db.NewSelect().Model((*Model.Coin)(nil)).Order("market_cap_rank ASC").Scan(ctx, dataIdList)
+
+		if errGetId != nil {
+			log.Fatal("ERROR: ", errGetId)
+		} else {
+			for _, coin := range *dataIdList {
+				idList = append(idList, coin.CoinId)
+			}
+		}
+
+		httpClient := &http.Client{
+			Timeout: time.Second * 10,
+		}
+		CG := coingecko.NewClient(httpClient)
+
+		dataCoinPrice, errGetPrice := CG.SimplePrice(idList, []string{"usd"})
+
+		if errGetPrice != nil {
+			log.Fatal("ERROR: ", errGetPrice)
+		} else {
+			for coinId, coin := range *dataCoinPrice {
+				_, errUpdate := db.NewUpdate().Model((*Model.Coin)(nil)).Where("coin_id = ?", coinId).Set("current_price = ?", coin["usd"]).Set("update_at = ?", time.Now()).Exec(ctx)
+				if errUpdate != nil {
+					log.Fatal("ERROR: ", errUpdate)
+				}
+			}
+			fmt.Println("Coin Update")
+		}
+		time.Sleep(time.Second)
+	}
 }

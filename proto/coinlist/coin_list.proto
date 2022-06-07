@@ -35,6 +35,11 @@ service CoinList {
 		delete: "/coins/{coin_id}"
 	  };
 	}
+	rpc SearchCoins (InputText) returns (stream CoinInfo){	
+		option (google.api.http) = {
+		get: "/search/{input_text}"
+	  };
+	}
 }
 
 message Empty{}
@@ -58,4 +63,8 @@ message Id {
 
 message Status {
 	int32 status = 1; 
+}
+
+message InputText {
+	string input_text = 1;
 }

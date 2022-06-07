@@ -4,10 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	// "log"
-	// "math/rand"
-	// "strconv"
-
 	db "github.com/markpassawat/go-grpc-coinlist/pkg/common/db"
 	Model "github.com/markpassawat/go-grpc-coinlist/pkg/common/model"
 	pb "github.com/markpassawat/go-grpc-coinlist/proto/coinlist"
@@ -20,15 +16,9 @@ type coinServer struct {
 
 var coins []*pb.CoinInfo
 
-func (s *coinServer) GetCoins(in *pb.Empty, stream pb.CoinList_GetCoinsServer)  error {
-	
-	coinlist := db.GetAll()
-	
-	// coins = 
+func (s *coinServer) GetCoins(in *pb.Empty, stream pb.CoinList_GetCoinsServer) error {
 
-	// if err := stream.Send(coinlist); err != nil {
-	// 			return err
-	// 		}
+	coinlist := db.GetAll()
 
 	for _, coin := range coinlist {
 		if err := stream.Send(coin); err != nil {
@@ -43,17 +33,10 @@ func (s *coinServer) GetCoin(ctx context.Context,
 	in *pb.Id) (*pb.CoinInfo, error) {
 
 	res := &pb.CoinInfo{}
-	// res.Image = in.Image
-	// for _, coin := range coins {
-	// 	if coin.GetCoinId() == in.GetCoinId() {
-	// 		res = coin
-	// 		break
-	// 	}
-	// }
 
 	// Connect DB
 	dbCon := db.ConnectDatabase()
-   
+
 	// GET
 	coinTemp := new(Model.Coin)
 	errGetCoinByID := dbCon.NewSelect().Model((*Model.Coin)(nil)).Where("coin_id = ?", in.CoinId).Scan(ctx, coinTemp)
@@ -74,13 +57,7 @@ func (s *coinServer) GetCoin(ctx context.Context,
 	return res, nil
 }
 
-func (s *coinServer) CreateCoins (ctx context.Context,in *pb.Id) (*pb.Status, error) {
-	// res := &pb.Id{}
-	// res.CoinId = in.CoinId
-	// res.Symbol = in.Symbol
-	// res.Name = in.Name
-
-	// coins = append(coins, in)
+func (s *coinServer) CreateCoins(ctx context.Context, in *pb.Id) (*pb.Status, error) {
 	res := &pb.Status{}
 
 	dbCon := db.ConnectDatabase()
@@ -98,9 +75,8 @@ func (s *coinServer) CreateCoins (ctx context.Context,in *pb.Id) (*pb.Status, er
 
 	}
 
-	return res,nil
+	return res, nil
 }
-
 
 func (s *coinServer) UpdateCoins(ctx context.Context,
 	in *pb.CoinInfo) (*pb.Status, error) {
@@ -132,4 +108,16 @@ func (s *coinServer) DeleteCoin(ctx context.Context,
 	}
 
 	return res, nil
+}
+
+func (s *coinServer) SearchCoins(in *pb.InputText, stream pb.CoinList_SearchCoinsServer) error {
+
+	coinlist := db.SearchCoins(in.InputText)
+
+	for _, coin := range coinlist {
+		if err := stream.Send(coin); err != nil {
+			return err
+		}
+	}
+	return nil
 }
