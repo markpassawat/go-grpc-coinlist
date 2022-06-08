@@ -96,15 +96,15 @@ func (s *coinServer) DeleteCoin(ctx context.Context,
 	return res, nil
 }
 
-func (s *coinServer) SearchCoins(in *pb.SearchText, stream pb.CoinList_SearchCoinsServer) error {
+func (s *coinServer) SearchCoins(ctx context.Context, in *pb.SearchText) (*pb.ReturnList, error) {
 
-	coinlist := db.SearchCoins(in.InputText)
+	coinList := db.SearchCoins(in.InputText)
 
-	for _, coin := range coinlist {
-		if err := stream.Send(coin); err != nil {
-			return err
-		}
+	coinListReturn := &pb.ReturnList{}
+	for _, coin := range coinList {
+		coinListReturn.Info = append(coinListReturn.Info, coin)
 	}
 
-	return nil
+	return coinListReturn, nil
+
 }

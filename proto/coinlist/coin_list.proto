@@ -24,18 +24,7 @@ service CoinList {
 		body: "*"
 	  };
 	}
-	rpc UpdateCoins (CoinInfo) returns (Status){	
-		option (google.api.http) = {
-		patch: "/coins"
-		body: "*"
-	  };
-	}
-	rpc DeleteCoin (Id) returns (Status){	
-		option (google.api.http) = {
-		delete: "/coins/{coin_id}"
-	  };
-	}
-	rpc SearchCoins (SearchText) returns (stream CoinInfo){	
+	rpc SearchCoins (SearchText) returns (ReturnList){	
 		option (google.api.http) = {
 		get: "/search/{input_text}"
 	  };
