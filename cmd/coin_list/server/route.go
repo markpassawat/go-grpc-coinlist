@@ -14,16 +14,16 @@ type coinServer struct {
 
 var coins []*pb.CoinInfo
 
-func (s *coinServer) GetCoins(in *pb.Empty, stream pb.CoinList_GetCoinsServer) error {
+func (s *coinServer) GetCoins(ctx context.Context, in *pb.Empty) (*pb.ReturnList, error) {
 
-	coinlist := db.GetAllCoin()
+	coinList := db.GetAllCoin()
 
-	for _, coin := range coinlist {
-		if err := stream.Send(coin); err != nil {
-			return err
-		}
+	coinListReturn := &pb.ReturnList{}
+	for _, coin := range coinList {
+		coinListReturn.Info = append(coinListReturn.Info, coin)
 	}
-	return nil
+
+	return coinListReturn, nil
 
 }
 
@@ -32,10 +32,10 @@ func (s *coinServer) GetCoin(ctx context.Context,
 
 	res, err := db.GetCoinById(in.CoinId)
 
-	errTemp := fmt.Errorf("There is no coin named %v", in.CoinId)
+	errAlert := fmt.Errorf("There is no coin named %v", in.CoinId)
 
 	if err != nil {
-		return res, errTemp
+		return res, errAlert
 	} else {
 		return res, nil
 	}
@@ -96,7 +96,7 @@ func (s *coinServer) DeleteCoin(ctx context.Context,
 	return res, nil
 }
 
-func (s *coinServer) SearchCoins(in *pb.InputText, stream pb.CoinList_SearchCoinsServer) error {
+func (s *coinServer) SearchCoins(in *pb.SearchText, stream pb.CoinList_SearchCoinsServer) error {
 
 	coinlist := db.SearchCoins(in.InputText)
 

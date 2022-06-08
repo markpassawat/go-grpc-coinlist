@@ -194,5 +194,7 @@ func UpdateCoinPrice() {
 			}
 			fmt.Println("Coin Update")
 		}
+
+		db.Close()
 	}
 }

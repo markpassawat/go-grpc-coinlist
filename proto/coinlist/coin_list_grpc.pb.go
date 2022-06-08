@@ -22,12 +22,12 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CoinListClient interface {
-	GetCoins(ctx context.Context, in *Empty, opts ...grpc.CallOption) (CoinList_GetCoinsClient, error)
+	GetCoins(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*ReturnList, error)
 	GetCoin(ctx context.Context, in *Id, opts ...grpc.CallOption) (*CoinInfo, error)
 	CreateCoins(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Status, error)
 	UpdateCoins(ctx context.Context, in *CoinInfo, opts ...grpc.CallOption) (*Status, error)
 	DeleteCoin(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Status, error)
-	SearchCoins(ctx context.Context, in *InputText, opts ...grpc.CallOption) (CoinList_SearchCoinsClient, error)
+	SearchCoins(ctx context.Context, in *SearchText, opts ...grpc.CallOption) (CoinList_SearchCoinsClient, error)
 }
 
 type coinListClient struct {
@@ -38,36 +38,13 @@ func NewCoinListClient(cc grpc.ClientConnInterface) CoinListClient {
 	return &coinListClient{cc}
 }
 
-func (c *coinListClient) GetCoins(ctx context.Context, in *Empty, opts ...grpc.CallOption) (CoinList_GetCoinsClient, error) {
-	stream, err := c.cc.NewStream(ctx, &CoinList_ServiceDesc.Streams[0], "/coinlist.CoinList/GetCoins", opts...)
+func (c *coinListClient) GetCoins(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*ReturnList, error) {
+	out := new(ReturnList)
+	err := c.cc.Invoke(ctx, "/coinlist.CoinList/GetCoins", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &coinListGetCoinsClient{stream}
-	if err := x.ClientStream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
-	return x, nil
-}
-
-type CoinList_GetCoinsClient interface {
-	Recv() (*CoinInfo, error)
-	grpc.ClientStream
-}
-
-type coinListGetCoinsClient struct {
-	grpc.ClientStream
-}
-
-func (x *coinListGetCoinsClient) Recv() (*CoinInfo, error) {
-	m := new(CoinInfo)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
+	return out, nil
 }
 
 func (c *coinListClient) GetCoin(ctx context.Context, in *Id, opts ...grpc.CallOption) (*CoinInfo, error) {
@@ -106,8 +83,8 @@ func (c *coinListClient) DeleteCoin(ctx context.Context, in *Id, opts ...grpc.Ca
 	return out, nil
 }
 
-func (c *coinListClient) SearchCoins(ctx context.Context, in *InputText, opts ...grpc.CallOption) (CoinList_SearchCoinsClient, error) {
-	stream, err := c.cc.NewStream(ctx, &CoinList_ServiceDesc.Streams[1], "/coinlist.CoinList/SearchCoins", opts...)
+func (c *coinListClient) SearchCoins(ctx context.Context, in *SearchText, opts ...grpc.CallOption) (CoinList_SearchCoinsClient, error) {
+	stream, err := c.cc.NewStream(ctx, &CoinList_ServiceDesc.Streams[0], "/coinlist.CoinList/SearchCoins", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -142,20 +119,20 @@ func (x *coinListSearchCoinsClient) Recv() (*CoinInfo, error) {
 // All implementations should embed UnimplementedCoinListServer
 // for forward compatibility
 type CoinListServer interface {
-	GetCoins(*Empty, CoinList_GetCoinsServer) error
+	GetCoins(context.Context, *Empty) (*ReturnList, error)
 	GetCoin(context.Context, *Id) (*CoinInfo, error)
 	CreateCoins(context.Context, *Id) (*Status, error)
 	UpdateCoins(context.Context, *CoinInfo) (*Status, error)
 	DeleteCoin(context.Context, *Id) (*Status, error)
-	SearchCoins(*InputText, CoinList_SearchCoinsServer) error
+	SearchCoins(*SearchText, CoinList_SearchCoinsServer) error
 }
 
 // UnimplementedCoinListServer should be embedded to have forward compatible implementations.
 type UnimplementedCoinListServer struct {
 }
 
-func (UnimplementedCoinListServer) GetCoins(*Empty, CoinList_GetCoinsServer) error {
-	return status.Errorf(codes.Unimplemented, "method GetCoins not implemented")
+func (UnimplementedCoinListServer) GetCoins(context.Context, *Empty) (*ReturnList, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCoins not implemented")
 }
 func (UnimplementedCoinListServer) GetCoin(context.Context, *Id) (*CoinInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCoin not implemented")
@@ -169,7 +146,7 @@ func (UnimplementedCoinListServer) UpdateCoins(context.Context, *CoinInfo) (*Sta
 func (UnimplementedCoinListServer) DeleteCoin(context.Context, *Id) (*Status, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteCoin not implemented")
 }
-func (UnimplementedCoinListServer) SearchCoins(*InputText, CoinList_SearchCoinsServer) error {
+func (UnimplementedCoinListServer) SearchCoins(*SearchText, CoinList_SearchCoinsServer) error {
 	return status.Errorf(codes.Unimplemented, "method SearchCoins not implemented")
 }
 
@@ -184,25 +161,22 @@ func RegisterCoinListServer(s grpc.ServiceRegistrar, srv CoinListServer) {
 	s.RegisterService(&CoinList_ServiceDesc, srv)
 }
 
-func _CoinList_GetCoins_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(Empty)
-	if err := stream.RecvMsg(m); err != nil {
-		return err
+func _CoinList_GetCoins_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Empty)
+	if err := dec(in); err != nil {
+		return nil, err
 	}
-	return srv.(CoinListServer).GetCoins(m, &coinListGetCoinsServer{stream})
-}
-
-type CoinList_GetCoinsServer interface {
-	Send(*CoinInfo) error
-	grpc.ServerStream
-}
-
-type coinListGetCoinsServer struct {
-	grpc.ServerStream
-}
-
-func (x *coinListGetCoinsServer) Send(m *CoinInfo) error {
-	return x.ServerStream.SendMsg(m)
+	if interceptor == nil {
+		return srv.(CoinListServer).GetCoins(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/coinlist.CoinList/GetCoins",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CoinListServer).GetCoins(ctx, req.(*Empty))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _CoinList_GetCoin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -278,7 +252,7 @@ func _CoinList_DeleteCoin_Handler(srv interface{}, ctx context.Context, dec func
 }
 
 func _CoinList_SearchCoins_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(InputText)
+	m := new(SearchText)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
@@ -306,6 +280,10 @@ var CoinList_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*CoinListServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
+			MethodName: "GetCoins",
+			Handler:    _CoinList_GetCoins_Handler,
+		},
+		{
 			MethodName: "GetCoin",
 			Handler:    _CoinList_GetCoin_Handler,
 		},
@@ -323,11 +301,6 @@ var CoinList_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams: []grpc.StreamDesc{
-		{
-			StreamName:    "GetCoins",
-			Handler:       _CoinList_GetCoins_Handler,
-			ServerStreams: true,
-		},
 		{
 			StreamName:    "SearchCoins",
 			Handler:       _CoinList_SearchCoins_Handler,

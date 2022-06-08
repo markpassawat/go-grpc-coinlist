@@ -8,7 +8,7 @@ import "google/protobuf/timestamp.proto";
 option go_package = "github.com/markpassawat/go-grpc-coinlist";
 
 service CoinList {
-	rpc GetCoins (Empty) returns (stream CoinInfo){	
+	rpc GetCoins (Empty) returns (ReturnList){	
 		option (google.api.http) = {
 		get: "/coins"
 	  };
@@ -35,7 +35,7 @@ service CoinList {
 		delete: "/coins/{coin_id}"
 	  };
 	}
-	rpc SearchCoins (InputText) returns (stream CoinInfo){	
+	rpc SearchCoins (SearchText) returns (stream CoinInfo){	
 		option (google.api.http) = {
 		get: "/search/{input_text}"
 	  };
@@ -45,14 +45,14 @@ service CoinList {
 message Empty{}
 
 message CoinInfo {
-    string Coin_id = 1;  
-    string Symbol = 2;
-	string Name = 3;
-	string Image = 4;
-	double Current_price = 5;
-	int32 Market_cap_rank = 6;
-	google.protobuf.Timestamp Create_at = 7;
-	google.protobuf.Timestamp Update_at = 8;
+    string coin_id = 1;  
+    string symbol = 2;
+	string name = 3;
+	string image = 4;
+	double current_price = 5;
+	int32 market_cap_rank = 6;
+	google.protobuf.Timestamp create_at = 7;
+	google.protobuf.Timestamp update_at = 8;
 }
 
 message Id {
@@ -65,6 +65,10 @@ message Status {
 	int32 status = 1; 
 }
 
-message InputText {
+message SearchText {
 	string input_text = 1;
+}
+
+message ReturnList {
+	repeated CoinInfo info = 1;
 }
