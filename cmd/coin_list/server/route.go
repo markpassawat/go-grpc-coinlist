@@ -3,7 +3,6 @@ package server
 import (
 	"context"
 	"fmt"
-	"log"
 
 	db "github.com/markpassawat/go-grpc-coinlist/pkg/common/db"
 	pb "github.com/markpassawat/go-grpc-coinlist/proto/coinlist"
@@ -31,14 +30,12 @@ func (s *coinServer) GetCoins(in *pb.Empty, stream pb.CoinList_GetCoinsServer) e
 func (s *coinServer) GetCoin(ctx context.Context,
 	in *pb.Id) (*pb.CoinInfo, error) {
 
-	// res := &pb.CoinInfo{}
-
 	res, err := db.GetCoinById(in.CoinId)
 
+	errTemp := fmt.Errorf("There is no coin named %v", in.CoinId)
+
 	if err != nil {
-		// log.Fatal("asd")
-		fmt.Print(err)
-		return res, nil
+		return res, errTemp
 	} else {
 		return res, nil
 	}
@@ -47,24 +44,24 @@ func (s *coinServer) GetCoin(ctx context.Context,
 func (s *coinServer) CreateCoins(ctx context.Context, in *pb.Id) (*pb.Status, error) {
 	res := &pb.Status{}
 
-	isExist, err := db.IsExist(in.CoinId)
+	isExist, errIsExist := db.IsExist(in.CoinId)
+	var err error
 
-	if err != nil {
-		log.Fatal("ERR: ", err)
-		res.Status = 400
+	if errIsExist != nil {
+		err = fmt.Errorf("There is something wrong with database")
 	}
 	if isExist {
-		res.Status = 400
+		err = fmt.Errorf("%v is already exist", in.CoinId)
 	} else {
 		isCreated := db.InsertOne(in.CoinId)
 		if isCreated {
 			res.Status = 201
 		} else {
-			res.Status = 400
+			err = fmt.Errorf("There is no coin named %v", in.CoinId)
 		}
 	}
 
-	return res, nil
+	return res, err
 }
 
 func (s *coinServer) UpdateCoins(ctx context.Context,
