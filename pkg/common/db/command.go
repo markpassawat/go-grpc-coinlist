@@ -153,10 +153,6 @@ func SearchCoins(searchText string) []*pb.CoinInfo {
 	return nil
 }
 
-func DeleteFromId(id string) {
-
-}
-
 func UpdateCoinPrice() {
 	ticker := time.NewTicker(time.Hour)
 	for _ = range ticker.C {

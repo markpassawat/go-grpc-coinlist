@@ -64,38 +64,6 @@ func (s *coinServer) CreateCoins(ctx context.Context, in *pb.Id) (*pb.Status, er
 	return res, err
 }
 
-func (s *coinServer) UpdateCoins(ctx context.Context,
-	in *pb.CoinInfo) (*pb.Status, error) {
-
-	res := &pb.Status{}
-	for index, coin := range coins {
-		if coin.GetCoinId() == in.GetCoinId() {
-			coins = append(coins[:index], coins[index+1:]...)
-			in.CoinId = coin.GetCoinId()
-			coins = append(coins, in)
-			res.Status = 200
-			break
-		}
-	}
-
-	return res, nil
-}
-
-func (s *coinServer) DeleteCoin(ctx context.Context,
-	in *pb.Id) (*pb.Status, error) {
-	res := &pb.Status{}
-	res.Status = 204
-	for index, coin := range coins {
-		if coin.GetSymbol() == in.GetSymbol() {
-			coins = append(coins[:index], coins[index+1:]...)
-			res.Status = 200
-			break
-		}
-	}
-
-	return res, nil
-}
-
 func (s *coinServer) SearchCoins(ctx context.Context, in *pb.SearchText) (*pb.ReturnList, error) {
 
 	coinList := db.SearchCoins(in.InputText)
