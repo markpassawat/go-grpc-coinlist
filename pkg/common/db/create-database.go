@@ -16,13 +16,13 @@ func CreateDatabase() {
 	dbCon := ConnectDatabase()
 	ctx := context.TODO()
 
-	resCreateDB, err := dbCon.NewCreateTable().
+	_, err := dbCon.NewCreateTable().
 		Model((*db.Coin)(nil)).
 		Exec(ctx)
 	if err != nil {
 		panic(err)
 	} else {
-		fmt.Println("Create database: ", resCreateDB)
+		fmt.Println("Create database successfully!")
 
 	}
 }
