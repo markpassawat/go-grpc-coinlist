@@ -5,7 +5,6 @@ Clone this repository with git:
 ```bash
 git clone https://github.com/markpassawat/go-grpc-coinlist.git
 ```
-## Usage
 Create docker for postgeSQL on port 5432 with password and max connection setting:
 
 ```bash
@@ -17,6 +16,8 @@ Create database and insert 150 default coins:
 ```bash
 go run cmd/create-database/main.go
 ```
+
+## Usage
 
 Run both command for run server:
 
