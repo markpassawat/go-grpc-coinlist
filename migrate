@@ -2,6 +2,7 @@
 
 BASEDIR=$(dirname "$0")
 
+
 down="down"
 if [ "$1" == "$down" ]
 then
@@ -31,9 +32,9 @@ fi
 
 echo "PGDB : $DB_HOST:$DB_PORT @$DB_NAME by $DB_USER:$DB_PASSWORD"
 
-echo "Waiting for Database ready..."
-for i in $(seq 1 10); do
-  PGPASSWORD=$DB_PASSWORD pg_isready -U $DB_USER -d $DB_NAME -h $DB_HOST -p $DB_PORT && break || sleep 3
-done
+# echo "Waiting for Database ready..."
+# for i in $(seq 1 10); do
+#   PGPASSWORD=$DB_PASSWORD pg_isready -U $DB_USER -d $DB_NAME -h $DB_HOST -p $DB_PORT && break || sleep 3
+# done
 
 migrate -path $BASEDIR/migrations -database postgres://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME?sslmode=$DB_SSLENABLE ${@:1}

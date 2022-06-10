@@ -8,5 +8,5 @@ CREATE TABLE IF NOT EXISTS public.coins
     current_price FLOAT, 
     market_cap_rank INT, 
     create_at TIMESTAMPTZ, 
-    update_at TIMESTAMPTZ, 
+    update_at TIMESTAMPTZ
 );
