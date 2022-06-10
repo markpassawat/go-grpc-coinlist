@@ -9,13 +9,14 @@ import (
 
 	"google.golang.org/protobuf/types/known/timestamppb"
 
-	Model "github.com/markpassawat/go-grpc-coinlist/pkg/common/model"
-	pb "github.com/markpassawat/go-grpc-coinlist/proto/coinlist"
+	db "github.com/markpassawat/go-grpc-coinlist/pkg/common/db"
+	Model "github.com/markpassawat/go-grpc-coinlist/pkg/coingecko/model"
+	pb "github.com/markpassawat/go-grpc-coinlist/pkg/coingecko/route"
 	coingecko "github.com/superoo7/go-gecko/v3"
 )
 
 func GetAllCoin() []*pb.CoinInfo {
-	db := ConnectDatabase()
+	db := db.ConnectDatabase()
 	ctx := context.TODO()
 
 	coinListTemp := new([]*Model.Coin)
@@ -46,7 +47,7 @@ func GetAllCoin() []*pb.CoinInfo {
 }
 
 func GetCoinById(coinId string) (*pb.CoinInfo, error) {
-	db := ConnectDatabase()
+	db := db.ConnectDatabase()
 	ctx := context.TODO()
 
 	coinTemp := new(Model.Coin)
@@ -72,7 +73,7 @@ func GetCoinById(coinId string) (*pb.CoinInfo, error) {
 }
 
 func IsExist(coinId string) (isExist bool, asd error) {
-	db := ConnectDatabase()
+	db := db.ConnectDatabase()
 	ctx := context.TODO()
 
 	isExist, err := db.NewSelect().Model((*Model.Coin)(nil)).Where("coin_id = ?", coinId).Exists(ctx)
@@ -109,7 +110,7 @@ func InsertOne(coinId string) bool {
 		}
 	}
 
-	dbCon := ConnectDatabase()
+	dbCon := db.ConnectDatabase()
 
 	_, err = dbCon.NewInsert().Model(newCoin).Exec(ctx)
 
@@ -123,7 +124,7 @@ func InsertOne(coinId string) bool {
 }
 
 func SearchCoins(searchText string) []*pb.CoinInfo {
-	db := ConnectDatabase()
+	db := db.ConnectDatabase()
 	ctx := context.TODO()
 
 	coinListTemp := new([]*Model.Coin)
@@ -156,7 +157,7 @@ func SearchCoins(searchText string) []*pb.CoinInfo {
 func UpdateCoinPrice() {
 	ticker := time.NewTicker(time.Hour)
 	for _ = range ticker.C {
-		db := ConnectDatabase()
+		db := db.ConnectDatabase()
 		ctx := context.TODO()
 
 		// Get id list from database
