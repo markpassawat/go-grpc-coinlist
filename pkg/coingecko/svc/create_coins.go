@@ -4,9 +4,8 @@ import (
 	"context"
 	"fmt"
 	db "github.com/markpassawat/go-grpc-coinlist/pkg/coingecko/db"
-	pb "github.com/markpassawat/go-grpc-coinlist/pkg/coingecko/route"
+	pb "github.com/markpassawat/go-grpc-coinlist/proto/coinlist"
 )
-
 
 func (s *CoinServer) CreateCoins(ctx context.Context, in *pb.Id) (*pb.Status, error) {
 	res := &pb.Status{}

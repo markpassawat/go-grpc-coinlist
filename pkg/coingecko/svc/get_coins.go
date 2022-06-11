@@ -3,7 +3,7 @@ package svc
 import (
 	"context"
 	db "github.com/markpassawat/go-grpc-coinlist/pkg/coingecko/db"
-	pb "github.com/markpassawat/go-grpc-coinlist/pkg/coingecko/route"
+	pb "github.com/markpassawat/go-grpc-coinlist/proto/coinlist"
 )
 
 type CoinServer struct {
@@ -11,7 +11,6 @@ type CoinServer struct {
 }
 
 var coins []*pb.CoinInfo
-
 
 func (s *CoinServer) GetCoins(ctx context.Context, in *pb.Empty) (*pb.ReturnList, error) {
 

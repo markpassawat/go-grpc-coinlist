@@ -7,25 +7,10 @@ import (
 	"net/http"
 	"time"
 
-	db "github.com/markpassawat/go-grpc-coinlist/pkg/common/db"
 	Model "github.com/markpassawat/go-grpc-coinlist/pkg/coingecko/model"
+	db "github.com/markpassawat/go-grpc-coinlist/pkg/common/db"
 	coingecko "github.com/superoo7/go-gecko/v3"
 )
-
-func CreateDatabase() {
-	dbCon := db.ConnectDatabase()
-	ctx := context.TODO()
-
-	_, err := dbCon.NewCreateTable().
-		Model((*Model.Coin)(nil)).
-		Exec(ctx)
-	if err != nil {
-		panic(err)
-	} else {
-		fmt.Println("Create database successfully!")
-
-	}
-}
 
 func InsertDefaultCoin() {
 	db := db.ConnectDatabase()
