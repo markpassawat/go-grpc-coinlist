@@ -14,7 +14,7 @@ import (
 
 func UpdateCoinPrice() {
 	ticker := time.NewTicker(time.Hour)
-	for _ = range ticker.C {
+	for range ticker.C {
 		db := db.ConnectDatabase()
 		ctx := context.TODO()
 
