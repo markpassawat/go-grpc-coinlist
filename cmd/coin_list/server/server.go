@@ -10,7 +10,7 @@ import (
 	"github.com/markpassawat/go-grpc-coinlist/cmd/coin_list/config"
 	cgk "github.com/markpassawat/go-grpc-coinlist/pkg/coingecko/svc"
 	db "github.com/markpassawat/go-grpc-coinlist/pkg/coingecko/db"
-	pb "github.com/markpassawat/go-grpc-coinlist/pkg/coingecko/route"
+	pb "github.com/markpassawat/go-grpc-coinlist/proto/coinlist"
 )
 
 func Handler(cfg *config.Config) (*grpc.Server, net.Listener) {

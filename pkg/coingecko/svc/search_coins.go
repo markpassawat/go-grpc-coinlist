@@ -3,7 +3,7 @@ package svc
 import (
 	"context"
 	db "github.com/markpassawat/go-grpc-coinlist/pkg/coingecko/db"
-	pb "github.com/markpassawat/go-grpc-coinlist/pkg/coingecko/route"
+	pb "github.com/markpassawat/go-grpc-coinlist/proto/coinlist"
 )
 
 func (s *CoinServer) SearchCoins(ctx context.Context, in *pb.SearchText) (*pb.ReturnList, error) {

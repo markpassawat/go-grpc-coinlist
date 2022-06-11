@@ -12,7 +12,7 @@ import (
 
 	"github.com/markpassawat/go-grpc-coinlist/cmd/gateway/config"
 	"github.com/markpassawat/go-grpc-coinlist/pkg/middleware"
-	pb "github.com/markpassawat/go-grpc-coinlist/pkg/coingecko/route"
+	pb "github.com/markpassawat/go-grpc-coinlist/proto/coinlist"
 )
 
 func Handler(cfg *config.Config) *http.Server {
