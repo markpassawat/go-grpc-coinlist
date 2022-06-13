@@ -10,16 +10,29 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3 
+      - name: asd
+        uses: actions/checkout@v3 
       - uses: bufbuild/buf-setup-action@v1.5.0
 
       - uses: actions/setup-go@v3
         with:
           go-version: 1.18
 
-      - uses: eWaterCycle/setup-grpc@v5
+      - uses: protoc-gen-grpc-gateway@latest
         with:
-           grpc-version: 1.30.2
+           go-version: 1.18
+
+      - uses: protoc-gen-go@latest
+        with:
+           go-version: 1.18
+
+      - uses: protoc-gen-go-grpc@latest
+        with:
+           go-version: 1.18
+
+      - uses: protoc-gen-openapiv2@latest
+        with:
+           go-version: 1.18
       
       - run: buf --version
       
