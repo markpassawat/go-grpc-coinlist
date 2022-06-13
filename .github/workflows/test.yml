@@ -11,16 +11,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: bufbuild/buf-setup-action@v1.5.0
 
       - name: Set up Go
       - uses: actions/setup-go@v3
         with:
           go-version: 1.18
+
+      - uses: eWaterCycle/setup-grpc@v5
+        with:
+           grpc-version: 1.30.2
       
-      - name: Set up buf
-         run: buf --version
+      - name: Buf Version
+      - run: buf --version
      
       - run: export PATH="$PATH:$(go env GOPATH)/bin"
 
       - name: Set up grpc
-         run: buf generate
+      - run: buf generate
