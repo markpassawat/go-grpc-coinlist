@@ -1,0 +1,26 @@
+name: Protobuf
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: ['**']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3 
+      - uses: bufbuild/buf-setup-action@v1.5.0
+      - uses: actions/setup-go@v3
+        with:
+          go-version: 1.18
+
+      - run: go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@latest
+      - run: go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+      - run: go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+      - run: go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@latest
+
+      - run: buf --version
+      - run: export PATH="$PATH:$(go env GOPATH)/bin"
+      - run: buf generate
