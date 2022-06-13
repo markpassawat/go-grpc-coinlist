@@ -24,7 +24,8 @@ jobs:
       
       - name: Buf Version
       - run: buf --version
-     
+      
+      - name: Setup Path
       - run: export PATH="$PATH:$(go env GOPATH)/bin"
 
       - name: Set up grpc
