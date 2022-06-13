@@ -5,15 +5,14 @@ import (
 	"log"
 
 	"google.golang.org/protobuf/types/known/timestamppb"
+	bun "github.com/uptrace/bun"
 
 	Model "github.com/markpassawat/go-grpc-coinlist/pkg/coingecko/model"
-	db "github.com/markpassawat/go-grpc-coinlist/pkg/common/db"
 	pb "github.com/markpassawat/go-grpc-coinlist/proto/coinlist"
 )
 
-func GetAllCoin() []*pb.CoinInfo {
-	db := db.ConnectDatabase()
-	ctx := context.TODO()
+func GetAllCoin(db *bun.DB, ctx context.Context) []*pb.CoinInfo {
+
 
 	coinListTemp := new([]*Model.Coin)
 	coinList := []*pb.CoinInfo{}
@@ -42,9 +41,7 @@ func GetAllCoin() []*pb.CoinInfo {
 
 }
 
-func GetCoinById(coinId string) (*pb.CoinInfo, error) {
-	db := db.ConnectDatabase()
-	ctx := context.TODO()
+func GetCoinById(db *bun.DB, ctx context.Context,coinId string) (*pb.CoinInfo, error) {
 
 	coinTemp := new(Model.Coin)
 

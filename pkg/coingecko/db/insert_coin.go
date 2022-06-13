@@ -7,12 +7,11 @@ import (
 	"time"
 
 	Model "github.com/markpassawat/go-grpc-coinlist/pkg/coingecko/model"
-	db "github.com/markpassawat/go-grpc-coinlist/pkg/common/db"
+	bun "github.com/uptrace/bun"
 	coingecko "github.com/superoo7/go-gecko/v3"
 )
 
-func InsertOne(coinId string) bool {
-	ctx := context.TODO()
+func InsertOne(db *bun.DB, ctx context.Context,coinId string) bool {
 
 	httpClient := &http.Client{
 		Timeout: time.Second * 10,
@@ -40,9 +39,8 @@ func InsertOne(coinId string) bool {
 		}
 	}
 
-	dbCon := db.ConnectDatabase()
 
-	_, err = dbCon.NewInsert().Model(newCoin).Exec(ctx)
+	_, err = db.NewInsert().Model(newCoin).Exec(ctx)
 
 	if err != nil {
 		log.Fatal("Err: ", err)

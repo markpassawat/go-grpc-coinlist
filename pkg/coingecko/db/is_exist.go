@@ -4,12 +4,10 @@ import (
 	"context"
 
 	Model "github.com/markpassawat/go-grpc-coinlist/pkg/coingecko/model"
-	db "github.com/markpassawat/go-grpc-coinlist/pkg/common/db"
+	bun "github.com/uptrace/bun"
 )
 
-func IsExist(coinId string) (isExist bool, asd error) {
-	db := db.ConnectDatabase()
-	ctx := context.TODO()
+func IsExist(db *bun.DB, ctx context.Context,coinId string) (isExist bool, asd error) {
 
 	isExist, err := db.NewSelect().Model((*Model.Coin)(nil)).Where("coin_id = ?", coinId).Exists(ctx)
 

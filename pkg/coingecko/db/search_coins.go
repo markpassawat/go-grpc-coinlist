@@ -8,14 +8,11 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 
 	Model "github.com/markpassawat/go-grpc-coinlist/pkg/coingecko/model"
-	db "github.com/markpassawat/go-grpc-coinlist/pkg/common/db"
+	bun "github.com/uptrace/bun"
 	pb "github.com/markpassawat/go-grpc-coinlist/proto/coinlist"
 )
 
-func SearchCoins(searchText string) []*pb.CoinInfo {
-	db := db.ConnectDatabase()
-	ctx := context.TODO()
-
+func SearchCoins(db *bun.DB, ctx context.Context,searchText string) []*pb.CoinInfo {
 	coinListTemp := new([]*Model.Coin)
 	coinList := []*pb.CoinInfo{}
 	searchTextTemp := fmt.Sprintf("%%%s%%", searchText)

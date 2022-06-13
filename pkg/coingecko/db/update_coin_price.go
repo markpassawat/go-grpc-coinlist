@@ -8,15 +8,14 @@ import (
 	"time"
 
 	Model "github.com/markpassawat/go-grpc-coinlist/pkg/coingecko/model"
-	db "github.com/markpassawat/go-grpc-coinlist/pkg/common/db"
+	bun "github.com/uptrace/bun"
 	coingecko "github.com/superoo7/go-gecko/v3"
 )
 
-func UpdateCoinPrice() {
+func UpdateCoinPrice(db *bun.DB, ctx context.Context) {
 	ticker := time.NewTicker(time.Hour)
 	for range ticker.C {
-		db := db.ConnectDatabase()
-		ctx := context.TODO()
+	
 
 		// Get id list from database
 		dataIdList := new([]Model.Coin)
