@@ -1,18 +1,16 @@
-name: Go
+name: Protobuf
 
 on:
   push:
-    branches: [ "develop" ]
+    branches: ['develop']
   pull_request:
-    branches: [ "develop" ]
+    branches: ['develop']
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: bufbuild/buf-setup-action@v1.5.0
-    - run: buf --version
-
-   
+      - uses: actions/checkout@v3
+      - uses: bufbuild/buf-setup-action@v1.5.0
+      - run: buf --version
+      - run: buf generate
