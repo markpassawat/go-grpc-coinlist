@@ -43,5 +43,5 @@ jobs:
           git config --global user.name "$GITHUB_ACTOR"
           git config --global user.email "${{ env.EMAIL_ACTOR }}"
 
-          git commit -a -m "${{ env.CI_COMMIT_MESSAGE }}"
+          git commit --allow-empty -a -m "${{ env.CI_COMMIT_MESSAGE }}"
           git push
