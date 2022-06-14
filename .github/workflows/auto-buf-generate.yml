@@ -10,6 +10,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - uses: oleksiyrudenko/gha-git-credentials@v2-latest
+        with:
+          token: '${{ secrets.GH_TOKEN }}'
+      
       - name: Action Checkout
         uses: actions/checkout@v3
       - name: Buf Build
@@ -18,7 +22,7 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version: 1.18
-
+  
       - name: Install GRPC Gateway
         run: go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@latest
       - name: Install Protobuf
