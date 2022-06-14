@@ -36,6 +36,9 @@ jobs:
         run: buf generate
       - name: Commit and push changes
         run: |
+          git config --global user.name "JamesJamesJa"
+          git config --global user.email "zerokeku20@gmail.com"
+
           git add .
-          git commit -m "Auto Buf Generate"
+          git commit -m ":alien:Auto Buf Generate"
           git push
