@@ -8,7 +8,7 @@ on:
     
 env:
   EMAIL_ACTOR: zerokeku20@gmail.com
-  CI_COMMIT_MESSAGE: 👽Auto Buf Generate
+  CI_COMMIT_MESSAGE: :alien:Auto Buf Generate
     
 jobs:
   build:

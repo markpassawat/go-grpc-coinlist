@@ -8,7 +8,7 @@ import "google/protobuf/timestamp.proto";
 option go_package = "github.com/markpassawat/go-grpc-coinlist";
 
 service CoinList {
-	rpc GetCoins (Empty) returns (ReturnList){	
+	rpc GetCoins (Empty) returns (CoinInfo){	
 		option (google.api.http) = {
 		get: "/coins"
 	  };
