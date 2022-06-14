@@ -10,9 +10,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: oleksiyrudenko/gha-git-credentials@v2-latest
+      - uses: actions/labeler@v2
         with:
-          token: '${{ secrets.GH_TOKEN }}'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Action Checkout
         uses: actions/checkout@v3
