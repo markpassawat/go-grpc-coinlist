@@ -24,7 +24,7 @@ service CoinList {
 		body: "*"
 	  };
 	}
-	rpc SearchCoins (SearchText) returns (CoinInfo){	
+	rpc SearchCoins (SearchText) returns (ReturnList){	
 		option (google.api.http) = {
 		get: "/search/{input_text}"
 	  };

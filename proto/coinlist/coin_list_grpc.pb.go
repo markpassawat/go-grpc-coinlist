@@ -25,7 +25,7 @@ type CoinListClient interface {
 	GetCoins(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*ReturnList, error)
 	GetCoin(ctx context.Context, in *Id, opts ...grpc.CallOption) (*CoinInfo, error)
 	CreateCoins(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Status, error)
-	SearchCoins(ctx context.Context, in *SearchText, opts ...grpc.CallOption) (*CoinInfo, error)
+	SearchCoins(ctx context.Context, in *SearchText, opts ...grpc.CallOption) (*ReturnList, error)
 }
 
 type coinListClient struct {
@@ -63,8 +63,8 @@ func (c *coinListClient) CreateCoins(ctx context.Context, in *Id, opts ...grpc.C
 	return out, nil
 }
 
-func (c *coinListClient) SearchCoins(ctx context.Context, in *SearchText, opts ...grpc.CallOption) (*CoinInfo, error) {
-	out := new(CoinInfo)
+func (c *coinListClient) SearchCoins(ctx context.Context, in *SearchText, opts ...grpc.CallOption) (*ReturnList, error) {
+	out := new(ReturnList)
 	err := c.cc.Invoke(ctx, "/coinlist.CoinList/SearchCoins", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -79,7 +79,7 @@ type CoinListServer interface {
 	GetCoins(context.Context, *Empty) (*ReturnList, error)
 	GetCoin(context.Context, *Id) (*CoinInfo, error)
 	CreateCoins(context.Context, *Id) (*Status, error)
-	SearchCoins(context.Context, *SearchText) (*CoinInfo, error)
+	SearchCoins(context.Context, *SearchText) (*ReturnList, error)
 }
 
 // UnimplementedCoinListServer should be embedded to have forward compatible implementations.
@@ -95,7 +95,7 @@ func (UnimplementedCoinListServer) GetCoin(context.Context, *Id) (*CoinInfo, err
 func (UnimplementedCoinListServer) CreateCoins(context.Context, *Id) (*Status, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateCoins not implemented")
 }
-func (UnimplementedCoinListServer) SearchCoins(context.Context, *SearchText) (*CoinInfo, error) {
+func (UnimplementedCoinListServer) SearchCoins(context.Context, *SearchText) (*ReturnList, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SearchCoins not implemented")
 }
 
