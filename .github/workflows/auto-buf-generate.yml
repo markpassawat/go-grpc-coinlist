@@ -37,10 +37,3 @@ jobs:
         run: export PATH="$PATH:$(go env GOPATH)/bin"
       - name: Run Buf Generate
         run: buf generate
-      - name: Commit and push changes
-        run: |
-          git config --global user.name "${{ GITHUB_ACTOR }}"
-          git config --global user.email "zerokeku20@gmail.com"
-
-          git commit -a -m "${{ env.CI_COMMIT_MESSAGE }}"
-          git push
