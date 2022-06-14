@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: ["**"]
     
+env:
+  EMAIL_ACTOR: zerokeku20@gmail.com
+  CI_COMMIT_MESSAGE: 👽Auto Buf Generate
+    
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,9 +22,6 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version: 1.18
-          
-      - name: Echo Test
-        run: echo "$GITHUB_ACTOR"
   
       - name: Install GRPC Gateway
         run: go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@latest
@@ -37,3 +38,10 @@ jobs:
         run: export PATH="$PATH:$(go env GOPATH)/bin"
       - name: Run Buf Generate
         run: buf generate
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "$GITHUB_ACTOR"
+          git config --global user.email "${{ env.EMAIL_ACTOR }}"
+
+          git commit -a -m "${{ env.CI_COMMIT_MESSAGE }}"
+          git push
