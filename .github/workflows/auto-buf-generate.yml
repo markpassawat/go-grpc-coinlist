@@ -36,8 +36,8 @@ jobs:
         run: buf generate
       - name: Commit and push changes
         run: |
-          git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
+          git config --global user.name "${{ GITHUB_ACTOR }}"
           git config --global user.email "zerokeku20@gmail.com"
 
-          git commit -a -m ":alien:Auto Buf Generate"
+          git commit -a -m "${{ env.CI_COMMIT_MESSAGE }}"
           git push
