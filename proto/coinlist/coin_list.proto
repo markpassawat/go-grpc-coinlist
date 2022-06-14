@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package coinlist;
 
-import "google/api/annotations.proto";-=
+import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/markpassawat/go-grpc-coinlist";
