@@ -7,7 +7,7 @@ on:
     branches: ["**"]
     
 env:
-  EMAIL_ACTOR: markpassawat.dev@gmail.com
+  EMAIL_ACTOR: passawat@forward.market
   CI_COMMIT_MESSAGE: :alien:Auto Buf Generate
     
 jobs:
