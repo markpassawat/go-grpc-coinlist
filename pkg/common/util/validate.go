@@ -1,6 +1,8 @@
 package util
 
 import (
+	"fmt"
+
 	errx "github.com/Forward-Protocol/APH-event-service/pkg/common/errorx"
 	"gopkg.in/go-playground/validator.v9"
 )
@@ -14,6 +16,6 @@ func Valid(s interface{}) error {
 
 func MustValid(s interface{}) {
 	if err := Valid(s); err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
 }

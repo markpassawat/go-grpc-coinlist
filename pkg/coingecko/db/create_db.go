@@ -16,7 +16,7 @@ func CreateDatabase() {
 		Model((*Model.Coin)(nil)).
 		Exec(ctx)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	} else {
 		fmt.Println("Create database successfully!")
 

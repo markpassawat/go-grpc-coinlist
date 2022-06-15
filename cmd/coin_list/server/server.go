@@ -2,7 +2,6 @@ package server
 
 import (
 	"fmt"
-	"log"
 	"net"
 
 	"google.golang.org/grpc"
@@ -19,7 +18,7 @@ func Handler(cfg *config.Config) (*grpc.Server, net.Listener) {
 	// Create a listener on TCP port
 	lis, err := net.Listen("tcp", fmt.Sprintf("%s:%d", cfg.Host, cfg.Port))
 	if err != nil {
-		log.Fatalln("Failed to listen:", err)
+		fmt.Println("Failed to listen:", err)
 	}
 
 	// Create a gRPC server object

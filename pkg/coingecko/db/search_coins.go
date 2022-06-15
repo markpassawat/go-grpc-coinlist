@@ -3,16 +3,15 @@ package db
 import (
 	"context"
 	"fmt"
-	"log"
 
 	"google.golang.org/protobuf/types/known/timestamppb"
 
 	Model "github.com/markpassawat/go-grpc-coinlist/pkg/coingecko/model"
-	bun "github.com/uptrace/bun"
 	pb "github.com/markpassawat/go-grpc-coinlist/proto/coinlist"
+	bun "github.com/uptrace/bun"
 )
 
-func SearchCoins(db *bun.DB, ctx context.Context,searchText string) []*pb.CoinInfo {
+func SearchCoins(db *bun.DB, ctx context.Context, searchText string) []*pb.CoinInfo {
 	coinListTemp := new([]*Model.Coin)
 	coinList := []*pb.CoinInfo{}
 	searchTextTemp := fmt.Sprintf("%%%s%%", searchText)
@@ -33,7 +32,7 @@ func SearchCoins(db *bun.DB, ctx context.Context,searchText string) []*pb.CoinIn
 	}
 
 	if err != nil {
-		log.Fatal("Err: ", err)
+		fmt.Println("Err: ", err)
 	} else {
 		return coinList
 	}

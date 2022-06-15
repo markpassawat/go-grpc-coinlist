@@ -1,9 +1,11 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/markpassawat/go-grpc-coinlist/cmd/coin_list/config"
 	"github.com/markpassawat/go-grpc-coinlist/cmd/coin_list/server"
-	
+
 	"github.com/kelseyhightower/envconfig"
 	"github.com/sirupsen/logrus"
 )
@@ -17,5 +19,5 @@ func main() {
 	e, lis := server.Handler(&cfg)
 	// Serve gRPC Server
 	log.Println("Serving gRPC on", lis.Addr().String())
-	log.Fatal(e.Serve(lis))
+	fmt.Println(e.Serve(lis))
 }
