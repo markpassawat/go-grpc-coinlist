@@ -7,7 +7,7 @@ on:
     branches: ["**"]
     
 env:
-  EMAIL_ACTOR: zerokeku20@gmail.com
+  EMAIL_ACTOR: markpassawat.dev@gmail.com
   CI_COMMIT_MESSAGE: :alien:Auto Buf Generate
     
 jobs:
