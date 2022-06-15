@@ -31,8 +31,6 @@ jobs:
       - name: Install Protoc Open API
         run: go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@latest
         
-      - run: echo $GITHUB_ACTOR
-
       - name: Check Buf Version
         run: buf --version
       - name: Set Path
@@ -42,7 +40,5 @@ jobs:
       - name: Commit and push changes
         run: |
           git config --global user.name "$GITHUB_ACTOR"
-          git pull
-
           git commit --allow-empty -a -m "${{ env.CI_COMMIT_MESSAGE }}"
           git push
