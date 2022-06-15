@@ -7,7 +7,6 @@ on:
     branches: ["**"]
     
 env:
-  EMAIL_ACTOR: passawat@passawat.passawat
   CI_COMMIT_MESSAGE: :alien:Auto Buf Generate
     
 jobs:
@@ -43,7 +42,6 @@ jobs:
       - name: Commit and push changes
         run: |
           git config --global user.name "$GITHUB_ACTOR"
-          git config --global user.email "${{ env.EMAIL_ACTOR }}"
           git pull
 
           git commit --allow-empty -a -m "${{ env.CI_COMMIT_MESSAGE }}"
