@@ -40,8 +40,10 @@ jobs:
         run: buf generate
       - name: Commit and push changes
         run: |
+          
           git config --global user.name "$GITHUB_ACTOR"
           git config --global user.email "${{ env.EMAIL_ACTOR }}"
+          git pull
 
           git commit --allow-empty -a -m "${{ env.CI_COMMIT_MESSAGE }}"
           git push
