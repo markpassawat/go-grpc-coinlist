@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+BASEDIR=$(dirname "$0")
+
+
+down="down"
+if [ "$1" == "$down" ]
+then
+  if [ "$2" == "" ]
+  then
+    echo "You are running revert migration without specific step!!!!"
+    echo "Please specify a down STEP."
+    echo "eg. ./migrate down 1"
+    exit 1
+  fi
+fi
+
+DB_HOST=$GRPC_CONNECTDB_DB_HOST
+DB_PORT=$GRPC_CONNECTDB_DB_PORT
+DB_NAME=$GRPC_CONNECTDB_DB_NAME
+DB_USER=$GRPC_CONNECTDB_DB_USER
+DB_PASSWORD=$GRPC_CONNECTDB_DB_PASSWORD
+DB_SSLENABLE=$GRPC_CONNECTDB_DB_SSLENABLE
+
+echo "$DB_HOST"
+
+if [ -z "$DB_NAME" ]
+then
+  echo "Please load env configuration by run 'source ./env'"
+  exit 1
+fi
+
+echo "PGDB : $DB_HOST:$DB_PORT @$DB_NAME by $DB_USER:$DB_PASSWORD"
+
+# echo "Waiting for Database ready..."
+# for i in $(seq 1 10); do
+#   PGPASSWORD=$DB_PASSWORD pg_isready -U $DB_USER -d $DB_NAME -h $DB_HOST -p $DB_PORT && break || sleep 3
+# done
+
+migrate -path $BASEDIR/migrations -database postgres://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME?sslmode=$DB_SSLENABLE ${@:1}
