@@ -1,0 +1,19 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:14
+    restart: unless-stopped
+    container_name: go_grpc_coinlist
+    command: postgres -c 'max_connections=500' -c 'shared_buffers=1GB'
+    volumes:
+      - postgres-db-data:/var/lib/postgresql/data
+    ports:
+      - ${GRPC_CONNECTDB_DB_PORT}:5432
+    environment:
+      - POSTGRES_USER=${GRPC_CONNECTDB_DB_USER}
+      - POSTGRES_PASSWORD=${GRPC_CONNECTDB_DB_PASSWORD}
+      - POSTGRES_DB=${GRPC_CONNECTDB_DB_NAME}
+
+volumes:
+  postgres-db-data:
+    driver: local
