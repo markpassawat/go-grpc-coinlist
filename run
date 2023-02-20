@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
 APPNAME=$1
+./migrate up
 source ./env $APPNAME
 go run cmd/$APPNAME/*.go

@@ -2,6 +2,7 @@
 
 BASEDIR=$(dirname "$0")
 
+CREATE_ARGS=" -ext sql -seq -dir ./migrations"
 
 down="down"
 if [ "$1" == "$down" ]
